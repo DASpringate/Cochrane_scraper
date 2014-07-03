@@ -68,12 +68,18 @@
 (defn parse-xml
   "Parse data from Cochrane data Revman string using zip and xml"
   [dat]
-  (zip-str (:body dat)))
+  (if (map? dat)
+    (zip-str (:body dat))
+    (zip-str dat)))
+  
 
 (defn parse-enlive
   "Parse data from Cochrane data Revman string using enlive"
   [dat]
-  (html/html-snippet (:body dat)))
+  (if (map? dat)
+    (html/html-snippet (:body dat))
+    (html/html-snippet dat)))
+  
 
 (defn save-rm5
   "Saves an rm5 file to disk"
