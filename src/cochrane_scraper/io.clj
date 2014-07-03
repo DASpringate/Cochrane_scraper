@@ -3,7 +3,6 @@
             [clojure.data.csv :as csv]
             [cochrane-scraper.parse :as csp]))
 
-
 (defn in-coll? 
   "Is x in the collection?"
   [coll]
@@ -23,9 +22,7 @@
     (with-open [file (io/writer path)]
       (csv/write-csv file (cons headers rows)))))
 
-
-(def ^:dynamic rev-data (csp/revman-data (slurp "data/rm6.rm5")))
-(write-csv "data/rm6.csv" rev-data 
-           [:comparison :outcome :subgroup :name :study_id :data_type :method
-            :effect_measure :random :totals])
-
+;(def ^:dynamic rev-data  (csp/revman-data (slurp "data/rm6.rm5")))
+;(write-csv "data/rm6.csv" (csp/revman-data (slurp "data/rm6.rm5")) 
+;           [:comparison :outcome :subgroup :name :study_id :data_type :method
+;            :effect_measure :random :totals])

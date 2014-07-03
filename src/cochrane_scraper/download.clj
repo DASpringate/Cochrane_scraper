@@ -6,13 +6,6 @@
             [clojure.zip :as zip]))
 
 
-; [x] get url
-; [x] check to pub[x]
-; [x] check for latest version
-; [x] get download link
-; [x] tick checkbox
-; [x] download rm file
-
 (def ^:dynamic *cochrane-base* "/doi/10.1002/14651858.CD")
 (def ^:dynamic *wiley-base* "http://onlinelibrary.wiley.com")
 
