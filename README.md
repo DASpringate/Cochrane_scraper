@@ -14,6 +14,8 @@ An earlier version of this software was used in the following publications:
 
 * [Konopantelis, Springate and Reeves (2013). A Re-Analysis of the Cochrane Library Data: The Dangers of Unobserved Heterogeneity in Meta-Analyses](http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0069930)
 
+Please let me know if you use this software for your research and I'll add your publication to the list.
+
 ## Installation
 
 This software is cross-platform (tested on Windows and Linux). You need to have an up-to-date version of Java installed first.
