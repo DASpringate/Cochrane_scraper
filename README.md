@@ -36,12 +36,12 @@ $ java -jar cochrane_scraper-0.1.0-standalone.jar [args]
 
 ## Options
 
--s --start ID to start with
--e --end ID to end with
--z --sleep Number of seconds to sleep between downloads (default 2)
--d --dir Directory to save downloaded files to. 
--r --rm5 Download rm5 files?
--c --csv Export csv files
+* -s --start ID to start with    
+* -e --end ID to end with    
+* -z --sleep Number of seconds to sleep between downloads (default 2)    
+* -d --dir Directory to save downloaded files to    
+* -r --rm5 Download rm5 files       
+* -c --csv Export csv files    
 
 ## Examples
 
