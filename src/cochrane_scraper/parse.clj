@@ -1,11 +1,28 @@
 (ns cochrane-scraper.parse
   (:require [net.cgrand.enlive-html :as html]
             [clojure.xml :as xml]
-            [clojure.zip :as zip]
-            [cochrane-scraper.download :as dl]))
+            [clojure.zip :as zip]))
 
+(defn zip-str 
+  "Parses an xml string to clojure data structures"
+  [s]
+  (zip/xml-zip (xml/parse (java.io.ByteArrayInputStream. (.getBytes s)))))
 
+(defn parse-xml
+  "Parse data from Cochrane data Revman string using zip and xml"
+  [dat]
+  (if (map? dat)
+    (zip-str (:body dat))
+    (zip-str dat)))
+  
 
+(defn parse-enlive
+  "Parse data from Cochrane data Revman string using enlive"
+  [dat]
+  (if (map? dat)
+    (html/html-snippet (:body dat))
+    (html/html-snippet dat)))
+  
 (defn match-tag
   "Is the pattern in the tag keyword of the map?"
   [m pattern]
@@ -124,11 +141,11 @@
       (html/select parsed [:COMPARISON])
       false)))
 
-(defn revman-data
+(defn parse-csv
   "Take a Revman file string, parse it, extract the data and merge in
    missing data fields"
   [revman]
-  (if-let [rev-comps (-> (dl/parse-enlive revman) comparisons)]
+  (if-let [rev-comps (-> (parse-enlive revman) comparisons)]
     (let [rev-data (extract-all rev-comps)
           rev-blank (zipmap (keys (apply merge rev-data)) (repeat ""))]
       (for [m rev-data] (merge rev-blank m)))
@@ -140,7 +157,7 @@
 
 ;(def ^:dynamic rev (revman-data (slurp "/home/david/clojure/cochrane_scraper/data/rm6.rm5")))
 ;(def ^:dynamic comps 
-;  (comparisons (dl/parse-enlive (slurp "data/rm6.rm5"))))
+;  (comparisons (parse-enlive (slurp "data/rm6.rm5"))))
 ;(def ^:dynamic comp (second comps))
 
 ;(def ^:dynamic *seq* (filter map? (:content *comp*)))

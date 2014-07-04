@@ -3,11 +3,11 @@
             [clojure.java.io :as io]
             [clj-http.client :as http]
             [clojure.xml :as xml]
-            [clojure.zip :as zip]))
+            [clojure.zip :as zip]
+            [cochrane-scraper.io :as writer]
+            [cochrane-scraper.parse :as parser]
+            [cochrane-scraper.settings :as settings]))
 
-
-(def ^:dynamic *cochrane-base* "/doi/10.1002/14651858.CD")
-(def ^:dynamic *wiley-base* "http://onlinelibrary.wiley.com")
 
 (defn fetch-url 
   "Fetches and parses a webpage, or false if page doesn't exist"
@@ -24,7 +24,7 @@
           abstract-replace #(clojure.string/replace % #"abstract" 
                                                     "downloadstats")]
       (if-not (empty? action)
-        (abstract-replace (str *wiley-base* 
+        (abstract-replace (str settings/*wiley-base* 
                                (:href (:attrs (first action)))))
         (abstract-replace url)))
     false))
@@ -35,8 +35,8 @@
   (let [pub-end 4
         next-pub (fn [id pub]
                    (if (>= pub-end pub)
-                     (let [url (str *wiley-base*
-                                    *cochrane-base*
+                     (let [url (str settings/*wiley-base*
+                                    settings/*cochrane-base*
                                     (format "%06d" id)
                                     ".pub" pub "/abstract")
                            link (recent-link url)]
@@ -53,54 +53,46 @@
                    :form-params {:tAndCs "on"}})
     (catch Exception e false)))
   
-(defn zip-str 
-  "Parses an xml string to clojure data structures"
-  [s]
-  (zip/xml-zip (xml/parse (java.io.ByteArrayInputStream. (.getBytes s)))))
 
-(defn parse-xml
-  "Parse data from Cochrane data Revman string using zip and xml"
-  [dat]
-  (if (map? dat)
-    (zip-str (:body dat))
-    (zip-str dat)))
-  
-
-(defn parse-enlive
-  "Parse data from Cochrane data Revman string using enlive"
-  [dat]
-  (if (map? dat)
-    (html/html-snippet (:body dat))
-    (html/html-snippet dat)))
-  
-
-(defn save-rm5
-  "Saves an rm5 file to disk"
-  [f rm5]
-  (if rm5 
-    (spit f (:body rm5))
-    (println "Data not available for " f)))
-  
 (defn download-all-rm5
-  "Attempts to download all revman files in a given range of ids"
-  [start end sleeper dir]
+  "Attempts to download all revman files from a given range of ids
+   from start to end. 
+   sleep determines how long to wait between downloads (seconds)
+   dir is the path to the download directory.
+   rm5 and csv are flags for whether or not to download rm5 or csv files"
+  [start end sleep dir rm5 csv]
   (let [download-rm5 (fn [i]
-                       (let [fname (str dir "/rm" i ".rm5")
-                             link (download-link i)]
-                         (if link (do 
-                                    (println "saving " fname)
-                                    (save-rm5 fname (review-data link))
-                                    (Thread/sleep (* sleeper 1000)))
-                             (do 
-                               (println "File " i " not found")
-                               (Thread/sleep (* sleeper 1000))))))]
-    (dorun (map download-rm5 (range start end)))))
+                       (if-let [link (download-link i)]
+                         (let [rm5-fname (str dir "/rm5/rm" i ".rm5")
+                               csv-fname (str dir "/csv/rm" i ".csv")
+                               rm5-data (review-data link)]
+                           (do
+                             (if rm5-data
+                               (do
+                                 (when rm5
+                                   (println "saving " rm5-fname)
+                                   (writer/save-rm5 rm5-fname rm5-data))
+                                 (when csv
+                                   (println "exporting " csv-fname)
+                                   (writer/write-csv csv-fname 
+                                                     (parser/parse-csv rm5-data) 
+                                                     settings/*first-cols*)))
+                               (println "No data found for " link)))
+                             (Thread/sleep (* sleep 1000)))
+                         (do 
+                           (println "File " i " not found")
+                           (Thread/sleep (* sleep 1000)))))]
+    (do
+      (writer/create-dir (str dir "/rm5"))
+      (writer/create-dir (str dir "/csv"))
+      (dorun (map download-rm5 (range start end))))))
 
 
 
-;(def *my-link* "http://onlinelibrary.wiley.com/doi/10.1002/14651858.CD000005.pub2/downloadstats")
+;(def *my-link* "http://onlinelibrary.wiley.com/doi/10.1002/14651858.CD000006.pub2/downloadstats")
 
-;(def *dat* (review-data *my-link*))    
+;(def ^:dynamic *dat* (review-data *my-link*))    
+;(def ^dynamic csv-data (parse/revman-data *dat))
 
 ;(def ^:dynamic adat (http/post *my-link*
 ;           {:body "string"
