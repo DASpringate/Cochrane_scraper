@@ -11,7 +11,7 @@
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 100000) "Must be a number between 1 and 100000"]]
    ["-e" "--end END" "End index for downloading"
-    :default 10
+    :default 10800
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 1 % 100000) "Must be a number between 2 and 100000"]]
    ["-z" "--sleep SLEEP" "Number of seconds to wait between downloads"

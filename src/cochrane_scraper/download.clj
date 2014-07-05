@@ -14,7 +14,9 @@
   [url]
   (try 
     (html/html-resource (java.net.URL. url))
-    (catch java.io.FileNotFoundException e false)))
+    (catch java.io.FileNotFoundException e false)
+    (catch java.io.IOException e (println url ": HTTP 500 Server Error"))
+    (finally false)))
 
 (defn recent-link 
   "Gets the link to the most recent dataset, or false"
@@ -45,47 +47,50 @@
     (next-pub review-id 2)))
 
 (defn review-data
-  "Downloads the data for a cochrane review in .rm format, checking the checkbox"
-  [link]
-  (try
-    (http/post link {:body "string"
-                   :body-encoding "UTF-8"
-                   :form-params {:tAndCs "on"}})
-    (catch Exception e false)))
+    "Downloads the data for a cochrane review in .rm format, checking the checkbox"
+    [link]
+    (try
+      (http/post link {:body "string"
+                       :body-encoding "UTF-8"
+                       :form-params {:tAndCs "on"}})
+      (catch Exception e (println "Unknown server error")))) 
   
 
-(defn download-all-rm5
-  "Attempts to download all revman files from a given range of ids
+  (defn download-all-rm5
+    "Attempts to download all revman files from a given range of ids
    from start to end. 
    sleep determines how long to wait between downloads (seconds)
    dir is the path to the download directory.
    rm5 and csv are flags for whether or not to download rm5 or csv files"
-  [start end sleep dir rm5 csv]
-  (let [download-rm5 (fn [i]
-                       (if-let [link (download-link i)]
-                         (let [rm5-fname (str dir "/rm5/rm" i ".rm5")
-                               csv-fname (str dir "/csv/rm" i ".csv")
-                               rm5-data (review-data link)]
-                           (do
-                             (if rm5-data
-                               (do
-                                 (when rm5
-                                   (println "saving " rm5-fname)
-                                   (writer/save-rm5 rm5-fname rm5-data))
-                                 (when csv
-                                   (println "exporting " csv-fname)
-                                   (writer/write-csv csv-fname 
-                                                     (parser/parse-csv rm5-data) 
-                                                     settings/*first-cols*)))
-                               (println "No data found for " link)))
+    [start end sleep dir rm5 csv]
+    (let [download-rm5 (fn [i]
+                         (if-let [link (download-link i)]
+                           (let [rm5-fname (str dir "/rm5/rm" i ".rm5")
+                                 csv-fname (str dir "/csv/rm" i ".csv")
+                                 rm5-data (review-data link)]
+                             (do
+                               (if rm5-data
+                                 (do
+                                   (when rm5
+                                     (println "saving " rm5-fname)
+                                     (writer/save-rm5 rm5-fname rm5-data))
+                                   (when csv
+                                     (println "exporting " csv-fname)
+                                     (writer/write-csv csv-fname 
+                                                       (parser/parse-csv rm5-data) 
+                                                       settings/*first-cols*)))
+                                 (println "No data found for " link)))
                              (Thread/sleep (* sleep 1000)))
-                         (do 
-                           (println "File " i " not found")
-                           (Thread/sleep (* sleep 1000)))))]
-    (do
-      (writer/create-dir (str dir "/rm5"))
-      (writer/create-dir (str dir "/csv"))
-      (dorun (map download-rm5 (range start end))))))
+                           (do 
+                             (println "File " i " not found")
+                             (Thread/sleep (* sleep 1000)))))]
+      (do
+        (writer/create-dir (str dir "/rm5"))
+        (writer/create-dir (str dir "/csv"))
+        (dorun (map download-rm5 (range start end))))))
+
+  
+
 
 
 
@@ -93,13 +98,11 @@
 
 ;(def ^:dynamic *dat* (review-data *my-link*))    
 ;(def ^dynamic csv-data (parse/revman-data *dat))
-
 ;(def ^:dynamic adat (http/post *my-link*
 ;           {:body "string"
 ;            :body-encoding "UTF-8"
 ;            :form-params {:tAndCs "on"}}))
 
 ;(def ^:dynamic xdat (parse-xml adat))
-
 ;(def ^:dynamic xenlive (pars e-enlive adat))
 
