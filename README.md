@@ -2,9 +2,9 @@
 
 ## Description
 
-A scraper for data from the Cochrane library. This program will automatically search through a range of potential Cochrane IDs and download the data for all found meta-analyses. 
+A scraper for data from the Cochrane library. This program will automatically search through a range of potential Cochrane IDs and download the data for all found meta-analyses.    
 
-You can specify to download the Revman rm5 XML files and/or export them in csv format.
+You can specify to download the Revman rm5 XML files and/or export them in csv format.  
 
 Note that this will only work where you have institutional access to the Cochrane library. I only recommend using this tool in the UK where copyright law has recently changed to allow downloading of academic data for non-commercial research purposes. See [here](http://www.legislation.gov.uk/uksi/2014/1372/regulation/3/made) (section 29A) and [here](https://www.gov.uk/government/publications/changes-to-copyright-law) for further information about the law change.
 
