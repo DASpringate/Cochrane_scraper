@@ -20,7 +20,7 @@ Please let me know if you use this software for your research and I'll add your 
 
 This software is cross-platform (tested on Windows and Linux). You need to have an up-to-date version of Java installed first.
 
-You can download a zipped archive of Version 1.0.0 (the current jar file) from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper/cochrane_scraper_v1.0.0.zip)
+You can download the zipped latest version of the jar file from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper)
 
 Alternatively, if you are a Clojure user and have [lein 2](http://leiningen.org/) installed, you can fork this repo and run:
 
@@ -44,16 +44,19 @@ $ java -jar cochrane_scraper-0.1.0-standalone.jar [args]
 * -d --dir Directory to save downloaded files to    
 * -r --rm5 Download rm5 files       
 * -c --csv Export csv files    
+* -m --minimal Don't produce output to stdout
+* -l --logfile set a path to a logfile.  Default is a file with the current timestamp
+
 
 ## Examples
 
-To download all available rm5 files and export to csv for Cochrane IDs from 1 to 20. All data is stored in directory data :
+To download all available rm5 files and export to csv for Cochrane IDs from 1 to 20. All data is stored in directory data.  Output is logged to mylog.log :
 
 ```
-$ java -jar cochrane_scraper-[version]-standalone.jar -s 1 -e 20 --dir data -cr
+$ java -jar cochrane_scraper-[version]-standalone.jar -s 1 -e 20 --dir data -cr --logfile mylog.log
 ```
 
-To see help options:
+To see the help options:
 
 ```
 $ java -jar cochrane_scraper-[version]-standalone.jar --help
@@ -63,8 +66,6 @@ $ java -jar cochrane_scraper-[version]-standalone.jar --help
 ### To do
 
 * The CSV is not a perfect clone of the output from the csv export in the Revman software.  Some of the column names will be slightly different, but the data should all be there.
-
-* Option to log to file to get a record of corrupted or not found files (can do this on *nix by suffixing the above command with " > cochrane.log") 
 
 Please feel free to contact me with suggestions or submit pull requrests to improve this software
 

@@ -15,7 +15,7 @@
   (try 
     (html/html-resource (java.net.URL. url))
     (catch java.io.FileNotFoundException e false)
-    (catch java.io.IOException e (println url ": HTTP 500 Server Error"))
+    (catch java.io.IOException e (writer/logprint url ": HTTP 500 Server Error"))
     (finally false)))
 
 (defn recent-link 
@@ -53,7 +53,7 @@
       (http/post link {:body "string"
                        :body-encoding "UTF-8"
                        :form-params {:tAndCs "on"}})
-      (catch Exception e (println "Unknown server error")))) 
+      (catch Exception e (writer/logprint "Unknown server error")))) 
   
 
   (defn download-all-rm5
@@ -72,37 +72,20 @@
                                (if rm5-data
                                  (do
                                    (when rm5
-                                     (println "saving " rm5-fname)
+                                     (writer/logprint "saving " rm5-fname)
                                      (writer/save-rm5 rm5-fname rm5-data))
                                    (when csv
-                                     (println "exporting " csv-fname)
+                                     (writer/logprint "exporting " csv-fname)
                                      (writer/write-csv csv-fname 
                                                        (parser/parse-csv rm5-data) 
                                                        settings/*first-cols*)))
-                                 (println "No data found for " link)))
+                                 (writer/logprint "No data found for " link)))
                              (Thread/sleep (* sleep 1000)))
                            (do 
-                             (println "File " i " not found")
+                             (writer/logprint "ID " i " doesn't match a review in the database")
                              (Thread/sleep (* sleep 1000)))))]
       (do
         (writer/create-dir (str dir "/rm5"))
         (writer/create-dir (str dir "/csv"))
         (dorun (map download-rm5 (range start end))))))
-
-  
-
-
-
-
-;(def *my-link* "http://onlinelibrary.wiley.com/doi/10.1002/14651858.CD000006.pub2/downloadstats")
-
-;(def ^:dynamic *dat* (review-data *my-link*))    
-;(def ^dynamic csv-data (parse/revman-data *dat))
-;(def ^:dynamic adat (http/post *my-link*
-;           {:body "string"
-;            :body-encoding "UTF-8"
-;            :form-params {:tAndCs "on"}}))
-
-;(def ^:dynamic xdat (parse-xml adat))
-;(def ^:dynamic xenlive (pars e-enlive adat))
 

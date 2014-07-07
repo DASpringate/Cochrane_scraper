@@ -1,6 +1,8 @@
 (ns cochrane-scraper.core
   (:require [clojure.tools.cli :refer [parse-opts]]
-            [cochrane-scraper.download :as dl])
+            [cochrane-scraper.download :as dl]
+            [cochrane-scraper.settings :as settings]
+            [cochrane-scraper.io :as io])
   (:gen-class))
 
 (def cli-options
@@ -23,6 +25,10 @@
    ["-c" "--csv" "Output review data in csv format"
     :default false]
    ["-r" "--rm5" "Output review data in rm5 (Revman) format"
+    :default false]
+   ["-m" "--minimal" "Produce minimal output during runs (All run info stored in logfile)"
+    :default false]
+   ["-l" "--logfile LOGFILE" "logfile name"
     :default false]])
 
 
@@ -30,18 +36,24 @@
   "Download Revman files from the cochrane database"
   [& args]
   (let [cmd-options (parse-opts args cli-options)
-        {:keys [help sleep start end dir csv rm5]} (:options cmd-options) 
+        {:keys [help sleep start end dir csv rm5 minimal logfile]} (:options cmd-options) 
         summary (:summary cmd-options)]
     (if-not (or help (not (or csv rm5))) 
       (do
-        (println "Downloading Cochrane IDs from " start " to " end)
-        (println "Sleeping for " 
+        (when minimal (alter-var-root 
+                           (var settings/*verbose*) 
+                           (fn [x] false)))
+        (when logfile (alter-var-root 
+                           (var settings/*logfile*) 
+                           (fn [x] logfile)))
+        (io/logprint "Downloading Cochrane IDs from " start " to " end)
+        (io/logprint "Sleeping for " 
                  sleep " seconds between downloads...")
         (cond 
-         (and csv rm5) (println "Saving Rm5 files to " dir "/rm5"  
+         (and csv rm5) (io/logprint "Saving Rm5 files to " dir "/rm5"  
                                 " and exporting csv files to " dir "/csv")
-         csv (println "Exporting csv files to " dir "/csv")
-         rm5 (println "Exporting rm5 to " dir "/rm5"))
+         csv (io/logprint "Exporting csv files to " dir "/csv")
+         rm5 (io/logprint "Exporting rm5 to " dir "/rm5"))
         (dl/download-all-rm5 start end sleep dir rm5 csv))
       (do (println summary)
           (println "You must specify output as one of 

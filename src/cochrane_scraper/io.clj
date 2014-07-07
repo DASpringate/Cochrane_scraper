@@ -1,6 +1,15 @@
 (ns cochrane-scraper.io
   (:require [clojure.java.io :as io]
-            [clojure.data.csv :as csv]))
+            [clojure.data.csv :as csv]
+            [cochrane-scraper.settings :as settings]))
+
+(defn logprint [& xs]
+  "Prints to sdout and also logs to file"
+  (if settings/*verbose*
+    (apply println xs)
+    (print "."))
+  (with-open [w (clojure.java.io/writer settings/*logfile*  :append true)]
+    (.write w (apply str (conj xs "\n")))))
 
 (defn in-coll? 
   "Is x in the collection?"
@@ -30,8 +39,3 @@
         rows (mapv #(mapv % columns) rev-data)]
     (with-open [file (io/writer path)]
       (csv/write-csv file (cons headers rows)))))
-
-;(def ^:dynamic rev-data  (csp/revman-data (slurp "data/rm5/rm4.rm5")))
-;(write-csv "data/rev-data.csv" rev-data 
-;           [:comparison :outcome :subgroup :name :study_id :data_type :method
-;            :effect_measure :random :totals])

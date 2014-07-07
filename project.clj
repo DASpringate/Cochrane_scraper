@@ -1,6 +1,6 @@
-(defproject cochrane_scraper "1.0.0"
+(defproject cochrane_scraper "1.1.0"
   :description "An app to download and export data from the Cochrane library of Systematic reviews"
-  :url "http://example.com/FIXME"
+  :url "https://github.com/DASpringate/Cochrane_scraper"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
