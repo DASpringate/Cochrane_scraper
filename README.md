@@ -18,7 +18,7 @@ An earlier version of this software was used in the following publications:
 
 If you use this software in your research, I'd appreciate it if you cited it in the following way:   
 
-Springate D A and Kontopantelis E (2014). Cochrane_scraper: tools for downloading data from the Cochrane Library of Systematic Reviews Version 1.1.0. [software]. Available from  https://github.com/DASpringate/Cochrane_scraper. DOI: http://dx.doi.org/10.5281/zenodo.10782.    
+> Springate D A and Kontopantelis E (2014). Cochrane_scraper: tools for downloading data from the Cochrane Library of Systematic Reviews Version 1.1.0. [software]. Available from  https://github.com/DASpringate/Cochrane_scraper. DOI: http://dx.doi.org/10.5281/zenodo.10782.    
 
 Also, let me know and I'll add your publication to the list.
 
