@@ -1,4 +1,6 @@
-# cochrane_scraper
+
+# cochrane_scraper [![DOI](https://zenodo.org/badge/4989/DASpringate/Cochrane_scraper.png)](http://dx.doi.org/10.5281/zenodo.10782)
+
 
 ## Description
 
@@ -14,7 +16,11 @@ An earlier version of this software was used in the following publications:
 
 * [Kontopantelis, Springate and Reeves (2013). A Re-Analysis of the Cochrane Library Data: The Dangers of Unobserved Heterogeneity in Meta-Analyses](http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0069930)
 
-If you use this software in your research, I'd appreciate it if you cited it using the DOI [![DOI](https://zenodo.org/badge/4989/DASpringate/Cochrane_scraper.png)](http://dx.doi.org/10.5281/zenodo.10782). Also, let me know and I'll add your publication to the list.
+If you use this software in your research, I'd appreciate it if you cited it in the following way:   
+
+Springate D A and Kontopantelis E (2014). Cochrane_scraper: tools for downloading data from the Cochrane Library of Systematic Reviews Version 1.1.0. [software]. Available from  https://github.com/DASpringate/Cochrane_scraper. DOI: http://dx.doi.org/10.5281/zenodo.10782.    
+
+Also, let me know and I'll add your publication to the list.
 
 ## Installation
 
