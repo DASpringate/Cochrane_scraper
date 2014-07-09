@@ -22,7 +22,7 @@ This software is cross-platform (tested on Windows and Linux). You need to have 
 
 You can download the zipped latest version of the jar file from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper)
 
-Alternatively, if you are a Clojure user and have [lein 2](http://leiningen.org/) installed, you can fork this repo and run:
+Alternatively, if you are a Clojure user and have [lein 2](http://leiningen.org/) installed, you can clone this repo and run:
 
 ```
 lein uberjar
