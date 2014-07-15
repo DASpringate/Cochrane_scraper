@@ -24,11 +24,13 @@ Also, let me know and I'll add your publication to the list.
 
 ## Installation
 
-This software is cross-platform (tested on Windows and Linux). You need to have an up-to-date version of Java installed first.
+This software is cross-platform (tested on Windows and Linux). You may need to install the (Java SDK)[http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp] if you don't already have it.
 
-You can download the zipped latest version of the jar file from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper)
+#### You can download the zipped latest version of the jar file from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper)
 
-Alternatively, if you are a Clojure user and have [lein 2](http://leiningen.org/) installed, you can clone this repo and run:
+Then unzip the to get the jar file. 
+
+Alternatively, if you are a Clojure user and have [lein 2](http://leiningen.org/) installed, you can clone this repo and run
 
 ```
 lein uberjar
@@ -38,11 +40,13 @@ from the project base directory to build your jar file.
 
 ## Usage
 
+You need to open a command prompt (Windows users type `cmd` in the search box). Then change directory to the one containing your jar file. Then run the program with the required arguments.
 ```
+$ cd path/to/cochrane/directory  # change to suit your location!
 $ java -jar cochrane_scraper-0.1.0-standalone.jar [args]
 ```
 
-## Options
+## Arguments
 
 * -s --start ID to start with    
 * -e --end ID to end with    
