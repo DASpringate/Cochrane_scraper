@@ -24,7 +24,7 @@ Also, let me know and I'll add your publication to the list.
 
 ## Installation
 
-This software is cross-platform (tested on Windows and Linux). You may need to install the (Java SDK)[http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp] if you don't already have it.
+This software is cross-platform (tested on Windows and Linux). You may need to install the [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp) if you don't already have it.
 
 #### You can download the zipped latest version of the jar file from [here](http://www.datajujitsu.co.uk/misc/jars/cochrane_scraper)
 
