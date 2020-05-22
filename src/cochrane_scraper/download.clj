@@ -23,7 +23,7 @@
   [url]
   (if-let [page (fetch-url url)]
     (let [action (html/select-nodes* page [(html/attr= :class "action")])
-          abstract-replace #(clojure.string/replace % #"abstract" 
+          abstract-replace #(clojure.string/replace % #"full"
                                                     "downloadstats")]
       (if-not (empty? action)
         (abstract-replace (str settings/*wiley-base* 
@@ -40,7 +40,7 @@
                      (let [url (str settings/*wiley-base*
                                     settings/*cochrane-base*
                                     (format "%06d" id)
-                                    ".pub" pub "/abstract")
+                                    ".pub" pub "/full")
                            link (recent-link url)]
                        (or link (recur id (inc pub))))
                      false))]
